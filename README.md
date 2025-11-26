@@ -48,3 +48,26 @@ Wenn du komplexere Datenbankfunktionen brauchst, die MySQL nicht sauber unterst�
 
 <img width="1541" height="1061" alt="image" src="https://github.com/user-attachments/assets/d34fb3cb-b547-4770-9865-c7dbf881f5b1" />
 
+Aufgaben:
+- Bibliotheken und Tools festlegen
+  
+Präsentation Freitag 05.12.2025
+- Figma präsentieren
+- Server zeigen
+- Zeigen, dass Datenbank eingerichtet ist
+- ER-Modell und sagen, dasss wirs so waufn Sevrer installiert haben
+- Backend Logik zeigen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
