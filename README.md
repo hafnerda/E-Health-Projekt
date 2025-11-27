@@ -45,6 +45,7 @@ Wenn du sehr viele unstrukturierte Daten (z. B. JSON, Logs, Streams) speicherst
 Wenn du massiv skalieren musst (Millionen User, verteilte Systeme → dann eher z. B. PostgreSQL oder NoSQL)
 
 Wenn du komplexere Datenbankfunktionen brauchst, die MySQL nicht sauber unterstützt (PostGIS, komplexe Abfragen, Trigger)
+
 <img width="972" height="715" alt="umlehealth" src="https://github.com/user-attachments/assets/52fd4905-4b3d-460a-9755-ca396aef7203" />
 
 
