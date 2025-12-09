@@ -1,0 +1,11 @@
+ehealth\repository\UserRepository.class
+ehealth\App.class
+ehealth\repository\LicenseCodeRepository.class
+ehealth\controller\AuthController$RegisterTherapistRequest.class
+ehealth\model\LicenseCode.class
+ehealth\controller\AuthController.class
+ehealth\service\AuthService.class
+ehealth\controller\AuthController$UserResponse.class
+ehealth\model\UserRole.class
+ehealth\controller\AuthController$LoginRequest.class
+ehealth\model\User.class
