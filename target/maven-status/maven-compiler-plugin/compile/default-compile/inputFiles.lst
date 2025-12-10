@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/services/TrainingPlanServiceImpl.java
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/services/AppointmentServiceImpl.java
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/model/ProgressEntry.java
@@ -20,3 +21,13 @@
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/model/Reminder.java
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/model/User.java
 /Users/damian/E-Health/E-Health-Projekt/src/main/java/repository/UserRepository.java
+=======
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\App.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\controller\AuthController.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\model\LicenseCode.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\model\User.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\model\UserRole.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\repository\LicenseCodeRepository.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\repository\UserRepository.java
+C:\Users\kovacsm\Documents\Hochschule\e_Health\E-Health-Projekt\src\main\java\ehealth\service\AuthService.java
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167

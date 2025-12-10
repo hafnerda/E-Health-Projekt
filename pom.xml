@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,24 +34,58 @@
     <dependencies>
 
         <!-- Spring Web (Controller, RestController, etc.) -->
+=======
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>ehealth</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ehealth</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.0</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- REST-API -->
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+<<<<<<< HEAD
         <!-- Spring Data JPA (Repositories, Hibernate) -->
+=======
+        <!-- JPA + H2-DB -->
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+<<<<<<< HEAD
 
         <!-- H2 In-Memory Database (lokales Testen) -->
+=======
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
+<<<<<<< HEAD
         <!-- Bean Validation (z. B. @NotNull, @Email usw.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,11 +100,20 @@
         </dependency>
 
         <!-- Tests -->
+=======
+        <!-- Passwort-Hashing -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
 
     </dependencies>
 
@@ -98,3 +142,16 @@
     </build>
 
 </project>
+=======
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+>>>>>>> d50a37cbd27ccece44eb573281792fd6297c2167
