@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Patient-Dashboard</title>
+  <style>
+    body { font-family: system-ui, Arial; margin: 24px; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    button { padding: 10px 14px; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; }
+    .progress { height: 14px; background: #eee; border-radius: 999px; overflow: hidden; }
+    .bar { height: 100%; width: 0%; background: #4caf50; transition: width .3s; }
+    ul { padding-left: 18px; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h2>Patient-Dashboard</h2>
+
+  <div class="card">
+    <div><b>Fortschritt</b></div>
+    <div class="muted" id="progressText">Lade…</div>
+    <div class="progress" style="margin-top:8px;">
+      <div class="bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="card row">
+    <button id="btnImport">Import</button>
+    <button id="btnExport">Export</button>
+    <button id="btnReport">Report</button>
+    <button id="btnLogout" style="margin-left:auto;">Logout</button>
+  </div>
+
+  <div class="card">
+    <div><b>Meine Messungen / PDFs</b></div>
+    <div class="muted" id="listInfo">Lade…</div>
+    <ul id="measurementList"></ul>
+  </div>
+
+  <script src="js/patient.js"></script>
+</body>
+</html>
