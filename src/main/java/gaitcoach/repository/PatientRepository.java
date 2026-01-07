@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     boolean existsByPatientCode(String patientCode);
     Optional<Patient> findByPatientCode(String patientCode);
+    Optional<Patient> findByPatientUser_Id(Long userId); 
 }
