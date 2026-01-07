@@ -3,6 +3,36 @@ const API_BASE = "/api/auth";
 const formsDiv = document.getElementById("forms");
 const messageDiv = document.getElementById("message");
 
+
+// Wenn schon eingeloggt -> direkt passendes Dashboard
+// Wenn schon eingeloggt -> nur auf der Login-Seite weiterleiten
+document.addEventListener("DOMContentLoaded", () => {
+  const isIndex = location.pathname === "/" || location.pathname.endsWith("/index.html");
+  if (!isIndex) return;
+
+  const raw = localStorage.getItem("auth_user");
+  if (!raw) return;
+
+  try {
+    const user = JSON.parse(raw);
+    if (user.role === "PATIENT") {
+      window.location.href = "/patient.html";
+    } else {
+      window.location.href = "/dashboard.html";
+    }
+  } catch {
+    localStorage.removeItem("auth_user");
+  }
+});
+
+
+// Hilfsfunktion: Backend kann JSON oder Text zurückgeben
+async function readJsonOrText(resp) {
+    const ct = (resp.headers.get("content-type") || "").toLowerCase();
+    if (ct.includes("application/json")) return await resp.json();
+    return await resp.text();
+}
+
 function setMessage(text, isError = false) {
     messageDiv.textContent = text;
     messageDiv.style.color = isError ? "darkred" : "darkgreen";
@@ -42,12 +72,13 @@ function renderRegisterTherapistForm() {
                     body: JSON.stringify(payload)
                 });
 
-                const data = await resp.json();
+                const data = await readJsonOrText(resp);
                 if (!resp.ok) {
-                    setMessage(data, true);
+                    setMessage(typeof data === "string" ? data : JSON.stringify(data), true);
                 } else {
                     setMessage(`Registrierung erfolgreich: ${data.name} (${data.email})`);
-                }
+            }          
+
             } catch (err) {
                 setMessage("Fehler bei der Registrierung.", true);
             }
@@ -85,13 +116,23 @@ function renderLoginForm(role) {
                     body: JSON.stringify(payload)
                 });
 
-                const data = await resp.json();
+                const data = await readJsonOrText(resp);
+
                 if (!resp.ok) {
-                    setMessage(data, true);
+                    setMessage(typeof data === "string" ? data : JSON.stringify(data), true);
                 } else {
                     setMessage(`Login erfolgreich als ${data.role}: ${data.name}`);
-                    // später: Token speichern, Redirect ins Dashboard usw.
-                }
+
+                    // User speichern (solange du noch kein JWT/Session hast)
+                    localStorage.setItem("auth_user", JSON.stringify(data));
+
+                    // Redirect je nach Rolle
+                    if (data.role === "PATIENT") {
+                        window.location.href = "/patient.html";
+                    } else {
+                        window.location.href = "/dashboard.html";
+                    }
+                }           
             } catch (err) {
                 setMessage("Fehler beim Login.", true);
             }
