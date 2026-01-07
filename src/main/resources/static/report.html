@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report</title>
+  <style>
+    body{font-family:system-ui,Arial;margin:0;background:#e9eef4}
+    header{padding:16px 20px;background:#cfd9e2;display:flex;justify-content:space-between;align-items:center}
+    main{padding:20px;max-width:1000px;margin:0 auto}
+    .card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+    pre{white-space:pre-wrap;word-break:break-word;background:#f5f7fa;padding:12px;border-radius:12px}
+    .muted{opacity:.75}
+    button{border:none;border-radius:12px;padding:10px 12px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div><b>Report</b></div>
+      <div class="muted" id="meta"></div>
+    </div>
+    <div>
+      <button onclick="history.back()">Zurück</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h3 id="title">Lade...</h3>
+      <div class="muted" id="sub"></div>
+      <hr />
+      <h4>Report</h4>
+      <iframe id="pdfFrame" style="width:100%;height:70vh;border:0;border-radius:12px;background:#f5f7fa"></iframe>
+        <div id="error" class="muted" style="margin-top:10px;"></div>
+    </div>
+  </main>
+
+  <script src="/js/report.js"></script>
+</body>
+</html>
