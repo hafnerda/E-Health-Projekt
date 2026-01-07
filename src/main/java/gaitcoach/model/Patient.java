@@ -21,6 +21,12 @@ public class Patient {
     @Column(nullable = false, length = 100)
     private String lastName;
 
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_user_id", nullable = false, unique = true)
+    private User patientUser;
+
+    
+
     // UI: Geburtsdatum
     private LocalDate birthDate;
 
@@ -63,4 +69,7 @@ public class Patient {
 
     public LocalDate getLastMeasurementDate() { return lastMeasurementDate; }
     public void setLastMeasurementDate(LocalDate lastMeasurementDate) { this.lastMeasurementDate = lastMeasurementDate; }
+
+    public User getPatientUser() { return patientUser; }
+    public void setPatientUser(User patientUser) { this.patientUser = patientUser; }
 }
