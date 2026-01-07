@@ -81,11 +81,8 @@ async function loadPatients() {
 }
 
 async function loadMeasurements(patientId) {
-  // TODO später: GET /api/patients/{id}/measurements
-  const measurements = [
-    { id: 11, created: "2026-01-01", type: "Gangbild", description: "Treadmill", attribute: "UWB" },
-    { id: 12, created: "2025-12-20", type: "Balance", description: "Standing", attribute: "IMU" }
-  ];
+  const res = await fetch(`${API_BASE}/patients/${patientId}/measurements`);
+  const measurements = await res.json();
 
   const tbody = document.getElementById("measurementsTbody");
   tbody.innerHTML = "";
@@ -93,10 +90,10 @@ async function loadMeasurements(patientId) {
   measurements.forEach(m => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${m.created}</td>
-      <td>${m.type}</td>
-      <td>${m.description}</td>
-      <td>${m.attribute}</td>
+      <td>${m.createdAt ?? ""}</td>
+      <td>${m.type ?? ""}</td>
+      <td>${m.description ?? ""}</td>
+      <td>${m.attribute ?? ""}</td>
     `;
 
     tr.addEventListener("click", () => {
@@ -107,6 +104,7 @@ async function loadMeasurements(patientId) {
     tbody.appendChild(tr);
   });
 }
+
 
 // --------- Modal: Neuer Patient / Bearbeiten ----------
 function initPatientModal() {
@@ -222,8 +220,69 @@ function initPatientModal() {
   return { openCreate, openEdit, close };
 }
 
+// --------- Modal: Neue Messung ----------
+function initMeasurementModal() {
+  const backdrop = document.getElementById("measurementModalBackdrop");
+  const closeBtn = document.getElementById("measurementModalClose");
+  const cancelBtn = document.getElementById("measurementModalCancel");
+  const form = document.getElementById("measurementForm");
+  const msg = document.getElementById("measurementFormMsg");
+
+  function setMsg(text, isError=false) {
+    msg.textContent = text || "";
+    msg.style.color = isError ? "#b00020" : "#0b3d1a";
+  }
+
+  function open() {
+    form.reset();
+    setMsg("");
+    backdrop.classList.remove("hidden");
+  }
+
+  function close() {
+    backdrop.classList.add("hidden");
+  }
+
+  closeBtn.addEventListener("click", close);
+  cancelBtn.addEventListener("click", close);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!selectedPatientId) {
+      setMsg("Erst Patient auswählen.", true);
+      return;
+    }
+
+    setMsg("Speichern...");
+    const payload = Object.fromEntries(new FormData(form).entries());
+
+    try {
+      const resp = await fetch(`${API_BASE}/patients/${selectedPatientId}/measurements`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(payload)
+      });
+
+      const data = await readJsonOrText(resp);
+      if (!resp.ok) {
+        setMsg(typeof data === "string" ? data : JSON.stringify(data), true);
+        return;
+      }
+
+      close();
+      await loadMeasurements(selectedPatientId);
+    } catch (err) {
+      setMsg("Netzwerkfehler: " + err.message, true);
+    }
+  });
+
+  return { open, close };
+}
+
+
 // --------- Actions ----------
-function bindActions(patientModal) {
+function bindActions(patientModal, measurementModal) {
   document.getElementById("btnLogout").addEventListener("click", () => {
     localStorage.removeItem("auth_user");
     window.location.href = "/index.html";
@@ -246,8 +305,69 @@ function bindActions(patientModal) {
 
   document.getElementById("sbMeasure").addEventListener("click", () => {
     if (!selectedPatientId) return alert("Erst Patient auswählen.");
-    alert("Messung starten (kommt später)");
+    measurementModal.open();
   });
+
+  document.getElementById("sbReport").addEventListener("click", () => {
+  if (!selectedMeasurementId) {
+    alert("Erst Messung auswählen.");
+    return;
+  }
+
+  window.location.href = `/report.html?measurementId=${selectedMeasurementId}`;
+});
+
+document.getElementById("sbReport").addEventListener("click", () => {
+  if (!selectedMeasurementId) return alert("Erst Messung auswählen.");
+  window.open(`${API_BASE}/measurements/${selectedMeasurementId}/report-pdf/inline`, "_blank");
+});
+
+document.getElementById("sbExport").addEventListener("click", () => {
+  if (!selectedMeasurementId) return alert("Erst Messung auswählen.");
+
+  const input = document.getElementById("pdfFileInput");
+  input.value = ""; // reset, damit gleiche Datei erneut gewählt werden kann
+  input.click();
+});
+
+document.getElementById("pdfFileInput").addEventListener("change", async (e) => {
+  if (!selectedMeasurementId) return;
+
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (!file.type.toLowerCase().includes("pdf")) {
+    alert("Bitte eine PDF-Datei auswählen.");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("file", file);
+
+  try {
+    const resp = await fetch(`${API_BASE}/measurements/${selectedMeasurementId}/report-pdf`, {
+      method: "POST",
+      body: fd
+    });
+
+    const data = await readJsonOrText(resp);
+    if (!resp.ok) {
+      alert(typeof data === "string" ? data : JSON.stringify(data));
+      return;
+    }
+
+    alert("PDF wurde zur Messung gespeichert.");
+  } catch (err) {
+    alert("Netzwerkfehler: " + err.message);
+  }
+});
+
+document.getElementById("sbImport").addEventListener("click", () => {
+  if (!selectedMeasurementId) return alert("Erst Messung auswählen.");
+  window.location.href = `${API_BASE}/measurements/${selectedMeasurementId}/report-pdf/download`;
+});
+
+
 
   // Entfernen -> Patient löschen (Messungen später)
   document.getElementById("btnDelete").addEventListener("click", async () => {
@@ -290,8 +410,9 @@ function bindActions(patientModal) {
 document.addEventListener("DOMContentLoaded", async () => {
   requireAuth();
 
-  const patientModal = initPatientModal();
-  bindActions(patientModal);
+    const patientModal = initPatientModal();
+    const measurementModal = initMeasurementModal();
+    bindActions(patientModal, measurementModal);
 
   await loadPatients();
 });
