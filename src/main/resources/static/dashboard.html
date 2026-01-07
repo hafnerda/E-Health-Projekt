@@ -1,1 +1,168 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Health – Dashboard</title>
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="title">
+      <h1>WILLKOMMEN BEI <span class="brand">zebris GaitCoach</span></h1>
+    </div>
+
+    <div class="top-actions">
+      <button id="btnSettings" class="icon-btn" title="Einstellungen">⚙️</button>
+      <button id="btnAccount" class="icon-btn" title="Mein Account">👤</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- LEFT: Patienten -->
+    <section class="panel">
+      <div class="panel-head">
+        <span class="pill">Patienten</span>
+      </div>
+
+      <div class="panel-body">
+        <table class="grid" id="patientsTable">
+          <thead>
+            <tr>
+              <th>Geschlecht</th>
+              <th>Vorname</th>
+              <th>Nachname</th>
+              <th>Geburtsdatum</th>
+              <th>Letzte Messung</th>
+              <th>Patienten-ID</th>
+              <th>Gewicht</th>
+              <th>Körpergröße</th>
+            </tr>
+          </thead>
+          <tbody id="patientsTbody">
+            <!-- rows per JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel-footer">
+        <button id="btnEditPatient">Patient bearbeiten</button>
+        <button id="btnFilterPatients">Filter</button>
+        <button id="btnSortPatients">Sortieren</button>
+        <button id="btnSearchPatients">Patient suchen</button>
+        <button id="btnDelete" class="danger">Entfernen</button>
+      </div>
+    </section>
+
+    <!-- RIGHT: Messungen -->
+    <section class="panel">
+      <div class="panel-head">
+        <span class="pill">Messungen</span>
+      </div>
+
+      <div class="panel-body">
+        <table class="grid" id="measurementsTable">
+          <thead>
+            <tr>
+              <th>Erstellt</th>
+              <th>Typ</th>
+              <th>Beschreibung</th>
+              <th>Attribut</th>
+            </tr>
+          </thead>
+          <tbody id="measurementsTbody">
+            <!-- rows per JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar">
+      <button id="sbNewPatient" class="sb-btn">➕ Neuer Patient</button>
+      <button id="sbMeasure" class="sb-btn">📈 Messen</button>
+      <button id="sbTasks" class="sb-btn">✅ Aufgaben</button>
+      <button id="sbCalendar" class="sb-btn">📅 Kalender</button>
+      <button id="sbReport" class="sb-btn">📄 Report</button>
+      <button id="sbImport" class="sb-btn">⬇️ Import Daten</button>
+      <button id="sbExport" class="sb-btn">⬆️ Export Daten</button>
+
+      <div class="sidebar-foot">
+        <button id="btnLogout" class="sb-btn danger">Logout</button>
+      </div>
+    </aside>
+  </main>
+
+
+  <!-- NEW PATIENT MODAL -->
+  <div id="patientModalBackdrop" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="patientModalTitle">Neuer Patient</h3>
+        <button id="patientModalClose" class="icon-btn">✖</button>
+      </div>
+
+      <form id="patientForm" class="modal-body">
+        <div class="form-row">
+          <label>Geschlecht</label>
+          <select name="gender" required>
+            <option value="m">m</option>
+            <option value="w">w</option>
+            <option value="d" selected>d</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label>Vorname</label>
+          <input name="firstName" type="text" required />
+        </div>
+
+        <div class="form-row">
+          <label>Nachname</label>
+          <input name="lastName" type="text" required />
+        </div>
+
+        <div class="form-row">
+          <label>Geburtsdatum</label>
+          <input name="birthDate" type="date" />
+        </div>
+
+        <div class="form-row">
+          <label>Patienten-ID</label>
+          <input name="patientCode" type="text" required />
+        </div>
+
+        <div class="form-row">
+          <label>Gewicht (kg)</label>
+          <input name="weightKg" type="number" step="0.1" />
+        </div>
+
+        <div class="form-row">
+          <label>Körpergröße (cm)</label>
+          <input name="heightCm" type="number" step="0.1" />
+        </div>
+
+        <div class="form-row">
+          <label>Letzte Messung</label>
+          <input name="lastMeasurementDate" type="date" />
+        </div>
+
+        <div id="patientFormMsg" class="form-msg"></div>
+
+        <div class="modal-footer">
+          <button type="button" id="patientModalCancel">Abbrechen</button>
+          <button type="submit">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
+
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
 
