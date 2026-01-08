@@ -1,4 +1,5 @@
-package gaitcoach.service;
+package gaitcoach.services;
+
 import gaitcoach.model.User;
 import gaitcoach.model.UserRole;
 import gaitcoach.repository.UserRepository;
@@ -14,13 +15,12 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
+
     public PatientService(PatientRepository patientRepository,
-                          UserRepository userRepository) {
+            UserRepository userRepository) {
         this.patientRepository = patientRepository;
         this.userRepository = userRepository;
     }
-
 
     public List<Patient> getAll() {
         return patientRepository.findAll();
@@ -34,8 +34,7 @@ public class PatientService {
     public Patient getByUserId(Long userId) {
         return patientRepository.findByPatientUser_Id(userId)
                 .orElseThrow(() -> new RuntimeException("Patient nicht gefunden für userId=" + userId));
-}
-
+    }
 
     public Patient create(Patient p) {
         if (p.getPatientCode() == null || p.getPatientCode().trim().isEmpty()) {
@@ -67,13 +66,20 @@ public class PatientService {
             existing.setPatientCode(updated.getPatientCode());
         }
 
-        if (updated.getGender() != null) existing.setGender(updated.getGender());
-        if (updated.getFirstName() != null) existing.setFirstName(updated.getFirstName());
-        if (updated.getLastName() != null) existing.setLastName(updated.getLastName());
-        if (updated.getBirthDate() != null) existing.setBirthDate(updated.getBirthDate());
-        if (updated.getWeightKg() != null) existing.setWeightKg(updated.getWeightKg());
-        if (updated.getHeightCm() != null) existing.setHeightCm(updated.getHeightCm());
-        if (updated.getLastMeasurementDate() != null) existing.setLastMeasurementDate(updated.getLastMeasurementDate());
+        if (updated.getGender() != null)
+            existing.setGender(updated.getGender());
+        if (updated.getFirstName() != null)
+            existing.setFirstName(updated.getFirstName());
+        if (updated.getLastName() != null)
+            existing.setLastName(updated.getLastName());
+        if (updated.getBirthDate() != null)
+            existing.setBirthDate(updated.getBirthDate());
+        if (updated.getWeightKg() != null)
+            existing.setWeightKg(updated.getWeightKg());
+        if (updated.getHeightCm() != null)
+            existing.setHeightCm(updated.getHeightCm());
+        if (updated.getLastMeasurementDate() != null)
+            existing.setLastMeasurementDate(updated.getLastMeasurementDate());
 
         return patientRepository.save(existing);
     }
@@ -84,8 +90,10 @@ public class PatientService {
     }
 
     public Patient createWithLogin(Patient p, String email, String rawPassword) {
-        if (email == null || email.trim().isEmpty()) throw new RuntimeException("E-Mail fehlt.");
-        if (rawPassword == null || rawPassword.trim().isEmpty()) throw new RuntimeException("Passwort fehlt.");
+        if (email == null || email.trim().isEmpty())
+            throw new RuntimeException("E-Mail fehlt.");
+        if (rawPassword == null || rawPassword.trim().isEmpty())
+            throw new RuntimeException("Passwort fehlt.");
 
         String emailLower = email.toLowerCase().trim();
         if (userRepository.existsByEmail(emailLower)) {

@@ -1,7 +1,7 @@
 package gaitcoach.controller;
 
 import gaitcoach.model.Patient;
-import gaitcoach.service.PatientService;
+import gaitcoach.services.PatientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,17 +55,17 @@ public class PatientController {
             this.patientCode = p.getPatientCode();
             this.weightKg = p.getWeightKg();
             this.heightCm = p.getHeightCm();
-            this.lastMeasurementDate = p.getLastMeasurementDate() != null ? p.getLastMeasurementDate().toString() : null;
+            this.lastMeasurementDate = p.getLastMeasurementDate() != null ? p.getLastMeasurementDate().toString()
+                    : null;
             this.email = p.getPatientUser() != null ? p.getPatientUser().getEmail() : null;
         }
     }
 
-
     @GetMapping
     public List<PatientResponse> getAll() {
         return patientService.getAll().stream()
-            .map(PatientResponse::new)
-            .toList();
+                .map(PatientResponse::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -78,32 +78,30 @@ public class PatientController {
         return new PatientResponse(patientService.getByUserId(userId));
     }
 
-
-
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CreatePatientRequest req) {
-    try {
-        Patient p = new Patient();
-        p.setGender(req.gender);
-        p.setFirstName(req.firstName);
-        p.setLastName(req.lastName);
+        try {
+            Patient p = new Patient();
+            p.setGender(req.gender);
+            p.setFirstName(req.firstName);
+            p.setLastName(req.lastName);
 
-        if (req.birthDate != null && !req.birthDate.isBlank())
-            p.setBirthDate(java.time.LocalDate.parse(req.birthDate));
+            if (req.birthDate != null && !req.birthDate.isBlank())
+                p.setBirthDate(java.time.LocalDate.parse(req.birthDate));
 
-        p.setPatientCode(req.patientCode);
-        p.setWeightKg(req.weightKg);
-        p.setHeightCm(req.heightCm);
+            p.setPatientCode(req.patientCode);
+            p.setWeightKg(req.weightKg);
+            p.setHeightCm(req.heightCm);
 
-        if (req.lastMeasurementDate != null && !req.lastMeasurementDate.isBlank())
-            p.setLastMeasurementDate(java.time.LocalDate.parse(req.lastMeasurementDate));
+            if (req.lastMeasurementDate != null && !req.lastMeasurementDate.isBlank())
+                p.setLastMeasurementDate(java.time.LocalDate.parse(req.lastMeasurementDate));
 
-        Patient saved = patientService.createWithLogin(p, req.email, req.password);
-        return ResponseEntity.ok(new PatientResponse(saved));
-    } catch (RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+            Patient saved = patientService.createWithLogin(p, req.email, req.password);
+            return ResponseEntity.ok(new PatientResponse(saved));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
-}
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Patient patient) {

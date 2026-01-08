@@ -1,7 +1,7 @@
 package gaitcoach.controller;
 
 import gaitcoach.model.Measurement;
-import gaitcoach.service.MeasurementService;
+import gaitcoach.services.MeasurementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
@@ -40,64 +40,70 @@ public class MeasurementController {
 
     @PostMapping("/patients/{patientId}/measurements")
     public ResponseEntity<?> createForPatient(
-        @PathVariable Long patientId,
-        @RequestBody CreateMeasurementRequest req) {
+            @PathVariable Long patientId,
+            @RequestBody CreateMeasurementRequest req) {
 
-    try {
-        Measurement m = new Measurement();
-        m.setType(req.type);
-        m.setDescription(req.description);
-        m.setAttribute(req.attribute);
-        m.setReportText(req.reportText);
-        // createdAt wird im Service gesetzt
+        try {
+            Measurement m = new Measurement();
+            m.setType(req.type);
+            m.setDescription(req.description);
+            m.setAttribute(req.attribute);
+            m.setReportText(req.reportText);
+            // createdAt wird im Service gesetzt
 
-        Measurement saved = measurementService.createForPatient(patientId, m);
-        return ResponseEntity.ok(new MeasurementDto(saved));
-    } catch (RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+            Measurement saved = measurementService.createForPatient(patientId, m);
+            return ResponseEntity.ok(new MeasurementDto(saved));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
-}
-@PostMapping("/measurements/{id}/report-pdf")
-public ResponseEntity<?> uploadReportPdf(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-    try {
-        measurementService.uploadReportPdf(id, file);
-        return ResponseEntity.ok().build();
-    } catch (RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
-}
-@GetMapping("/measurements/{id}/report-pdf/inline")
-public ResponseEntity<?> viewReportPdfInline(@PathVariable Long id) {
-    try {
-        Measurement m = measurementService.getReportPdfOrThrow(id);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + safeName(m.getReportPdfFilename()) + "\"")
-                .body(m.getReportPdf());
-    } catch (RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @PostMapping("/measurements/{id}/report-pdf")
+    public ResponseEntity<?> uploadReportPdf(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        try {
+            measurementService.uploadReportPdf(id, file);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
-}
-@GetMapping("/measurements/{id}/report-pdf/download")
-public ResponseEntity<?> downloadReportPdf(@PathVariable Long id) {
-    try {
-        Measurement m = measurementService.getReportPdfOrThrow(id);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + safeName(m.getReportPdfFilename()) + "\"")
-                .body(m.getReportPdf());
-    } catch (RuntimeException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @GetMapping("/measurements/{id}/report-pdf/inline")
+    public ResponseEntity<?> viewReportPdfInline(@PathVariable Long id) {
+        try {
+            Measurement m = measurementService.getReportPdfOrThrow(id);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "inline; filename=\"" + safeName(m.getReportPdfFilename()) + "\"")
+                    .body(m.getReportPdf());
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
-}
 
-// kleiner Helfer gegen kaputte Dateinamen
-private static String safeName(String name) {
-    if (name == null || name.isBlank()) return "report.pdf";
-    return name.replaceAll("[\\r\\n\\\\\"]", "_");
-}
+    @GetMapping("/measurements/{id}/report-pdf/download")
+    public ResponseEntity<?> downloadReportPdf(@PathVariable Long id) {
+        try {
+            Measurement m = measurementService.getReportPdfOrThrow(id);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + safeName(m.getReportPdfFilename()) + "\"")
+                    .body(m.getReportPdf());
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    // kleiner Helfer gegen kaputte Dateinamen
+    private static String safeName(String name) {
+        if (name == null || name.isBlank())
+            return "report.pdf";
+        return name.replaceAll("[\\r\\n\\\\\"]", "_");
+    }
 
     // ----- DTO-Klassen -----
     public static class CreateMeasurementRequest {
@@ -107,12 +113,10 @@ private static String safeName(String name) {
         public String reportText;
     }
 
-
-
     // DTO (damit Lazy-Loading/Patient nicht im JSON explodiert)
     public static class MeasurementDto {
         public Long id;
-        public String createdAt;     // ISO String
+        public String createdAt; // ISO String
         public String type;
         public String description;
         public String attribute;

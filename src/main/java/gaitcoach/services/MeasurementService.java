@@ -1,4 +1,4 @@
-package gaitcoach.service;
+package gaitcoach.services;
 
 import gaitcoach.model.Measurement;
 import gaitcoach.repository.MeasurementRepository;
@@ -34,8 +34,10 @@ public class MeasurementService {
                 .orElseThrow(() -> new RuntimeException("Patient nicht gefunden."));
 
         m.setPatient(p);
-        if (m.getCreatedAt() == null) m.setCreatedAt(LocalDateTime.now());
-        if (m.getType() == null || m.getType().trim().isEmpty()) m.setType("Unbekannt");
+        if (m.getCreatedAt() == null)
+            m.setCreatedAt(LocalDateTime.now());
+        if (m.getType() == null || m.getType().trim().isEmpty())
+            m.setType("Unbekannt");
 
         Measurement saved = measurementRepository.save(m);
 
@@ -74,4 +76,3 @@ public class MeasurementService {
         return m;
     }
 }
-
