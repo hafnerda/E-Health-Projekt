@@ -1,20 +1,51 @@
-:root { --bg:#7f92a1; --panel:#dbe3ea; --panel2:#cfd9e2; --text:#0b1a26; }
-*{ box-sizing:border-box; font-family: system-ui, Arial; }
-body{ margin:0; background: linear-gradient(180deg, var(--bg), #6f8799); color:var(--text); }
+:root {
+  --bg:#7f92a1;
+  --panel:#dbe3ea;
+  --panel2:#cfd9e2;
+  --text:#0b1a26;
+}
 
+*{
+  box-sizing:border-box;
+  font-family: system-ui, Arial;
+}
+
+body{
+  margin:0;
+  background: linear-gradient(180deg, var(--bg), #6f8799);
+  color:var(--text);
+}
+
+/* Topbar */
 .topbar{
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:18px 24px;
 }
-.title h1{ margin:0; letter-spacing:1px; font-size:28px; }
+
+.title h1{
+  margin:0;
+  letter-spacing:1px;
+  font-size:28px;
+}
+
 .brand{ font-weight:700; }
 
-.top-actions{ display:flex; gap:10px; }
+.top-actions{
+  display:flex;
+  gap:10px;
+}
+
 .icon-btn{
-  border:none; border-radius:12px; padding:10px 12px; cursor:pointer;
+  border:none;
+  border-radius:12px;
+  padding:10px 12px;
+  cursor:pointer;
   background: rgba(255,255,255,0.25);
 }
 
+/* Layout */
 .layout{
   display:grid;
   grid-template-columns: 1fr 1fr 180px;
@@ -23,13 +54,20 @@ body{ margin:0; background: linear-gradient(180deg, var(--bg), #6f8799); color:v
   align-items: start;
 }
 
+/* Panels */
 .panel{
   background: rgba(255,255,255,0.25);
   border-radius: 18px;
   padding: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
-.panel-head{ display:flex; justify-content:flex-start; margin-bottom:10px; }
+
+.panel-head{
+  display:flex;
+  justify-content:flex-start;
+  margin-bottom:10px;
+}
+
 .pill{
   background: rgba(255,255,255,0.25);
   padding: 8px 14px;
@@ -45,33 +83,57 @@ body{ margin:0; background: linear-gradient(180deg, var(--bg), #6f8799); color:v
   min-height: 520px;
 }
 
-.grid{ width:100%; border-collapse:collapse; font-size:14px; }
+/* Table */
+.grid{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
 .grid thead th{
-  position: sticky; top:0;
+  position: sticky;
+  top:0;
   background: rgba(255,255,255,0.35);
-  padding:10px; text-align:left;
+  padding:10px;
+  text-align:left;
 }
+
 .grid td{
-  padding:10px; border-top: 1px solid rgba(0,0,0,0.08);
+  padding:10px;
+  border-top: 1px solid rgba(0,0,0,0.08);
 }
+
 .grid tr{ cursor:pointer; }
 .grid tr.selected{ background: rgba(0,0,0,0.08); }
 
+/* Footer */
 .panel-footer{
-  display:flex; gap:10px; flex-wrap:wrap;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
   padding-top:12px;
 }
+
 button{
-  border:none; border-radius:12px;
-  padding:10px 12px; cursor:pointer;
+  border:none;
+  border-radius:12px;
+  padding:10px 12px;
+  cursor:pointer;
   background: rgba(255,255,255,0.28);
 }
-button.danger{ background: rgba(255,70,70,0.25); }
 
+button.danger{
+  background: rgba(255,70,70,0.25);
+}
+
+/* Sidebar */
 .sidebar{
-  display:flex; flex-direction:column; gap:10px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
   padding: 8px;
 }
+
 .sb-btn{
   width:100%;
   text-align:left;
@@ -79,11 +141,11 @@ button.danger{ background: rgba(255,70,70,0.25); }
   padding:12px;
   background: rgba(255,255,255,0.22);
 }
+
 .sidebar-foot{ margin-top:auto; }
 
-
 /* Modal */
-.hidden { display: none !important; }
+.hidden{ display:none !important; }
 
 .modal-backdrop{
   position: fixed;
@@ -130,7 +192,8 @@ button.danger{ background: rgba(255,70,70,0.25); }
   opacity: 0.85;
 }
 
-.modal-body input, .modal-body select{
+.modal-body input,
+.modal-body select{
   padding: 10px;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.12);
@@ -149,4 +212,221 @@ button.danger{ background: rgba(255,70,70,0.25); }
   justify-content: flex-end;
   gap: 10px;
   padding-top: 6px;
+}
+
+/* Checkboxen */
+.chk{
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #cfd8dc;
+  cursor: pointer;
+}
+
+.chk.done{
+  background: #2e7d32;
+  border-color: #2e7d32;
+}
+
+
+/* ===== LOOK LIKE SCREENSHOT (nur Farben/Optik) ===== */
+
+:root{
+  --bg1:#7f97ad;
+  --bg2:#6f879f;
+
+  --panelOuter: rgba(255,255,255,0.30);
+  --panelInner: rgba(255,255,255,0.34);
+
+  --pillDark: rgba(60,75,90,0.55);
+  --pillText: #ffffff;
+
+  --shadow1: 0 10px 26px rgba(0,0,0,0.18);
+  --shadow2: 0 10px 22px rgba(0,0,0,0.14);
+
+  --radiusBig: 22px;
+  --radiusMid: 18px;
+}
+
+/* Hintergrund (soft cloudy) */
+body{
+  background:
+    radial-gradient(1200px 600px at 60% 20%, rgba(255,255,255,0.18), transparent 55%),
+    radial-gradient(900px 500px at 25% 70%, rgba(255,255,255,0.14), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2)) !important;
+}
+
+/* Panels wie im Bild (hell + Schatten) */
+.panel{
+  background: var(--panelOuter) !important;
+  border-radius: var(--radiusBig) !important;
+  box-shadow: var(--shadow1) !important;
+}
+
+.panel-body{
+  background: var(--panelInner) !important;
+  border-radius: var(--radiusBig) !important;
+  box-shadow: var(--shadow2) !important;
+  border: 2px solid rgba(255,255,255,0.25) !important;
+}
+
+/* Pills (Patienten/Messungen) dunkler wie im Screenshot */
+.pill{
+  background: var(--pillDark) !important;
+  color: var(--pillText) !important;
+  border-radius: 999px !important;
+  padding: 10px 22px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.16) !important;
+}
+
+/* Header Titel mittig/„clean“ */
+.title h1{
+  letter-spacing: 0.06em !important;
+  font-weight: 900 !important;
+  font-size: 34px !important;
+  text-transform: uppercase !important;
+}
+
+.brand{
+  font-weight: 600 !important;
+  text-transform:none !important;
+  font-family: "Segoe Script","Brush Script MT","Comic Sans MS",cursive !important;
+}
+
+/* Buttons generell: runder, weich */
+button{
+  border-radius: 16px !important;
+  background: rgba(255,255,255,0.22) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12) !important;
+}
+
+/* Danger/Entfernen etwas rotlicher */
+button.danger{
+  background: rgba(255,70,70,0.22) !important;
+}
+
+/* Emoji/Icons optisch wie “schwarz” im Screenshot */
+.icon-btn,
+.sb-btn{
+  filter: grayscale(1) contrast(1.2) brightness(0.1) !important;
+}
+
+/* Aber Text soll normal bleiben -> Text wieder aufhellen */
+.icon-btn, .sb-btn{
+  color: rgba(0,0,0,0.78) !important;
+  background: rgba(255,255,255,0.20) !important;
+}
+
+/* ===== FINAL LOOK wie Referenz (nur Farben/Optik, keine Anordnung) ===== */
+
+/* Hintergrund */
+body{
+  outline: none !important;
+  background:
+    radial-gradient(1200px 600px at 60% 20%, rgba(255,255,255,0.16), transparent 55%),
+    radial-gradient(900px 500px at 25% 70%, rgba(255,255,255,0.12), transparent 60%),
+    linear-gradient(180deg, #7f97ad, #6f879f) !important;
+}
+
+/* Panels: weich + klarer Rand */
+.panel{
+  background: rgba(255,255,255,0.22) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18) !important;
+}
+
+.panel-body{
+  background: rgba(255,255,255,0.28) !important;
+  border-radius: 20px !important;
+  border: 2px solid rgba(255,255,255,0.30) !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06) !important;
+}
+
+/* Pills (Patienten/Messungen) dunkel-grau wie im Bild */
+.pill{
+  background: rgba(70,86,101,0.60) !important;
+  color: #fff !important;
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18) !important;
+}
+
+/* Tabellen: neutraler, wie im Screenshot */
+.grid thead th{
+  background: rgba(255,255,255,0.34) !important;
+  color: rgba(0,0,0,0.78) !important;
+}
+
+.grid td{
+  color: rgba(0,0,0,0.75) !important;
+}
+
+.grid tr.selected{
+  background: rgba(0,0,0,0.06) !important;
+}
+
+/* Buttons: weich, grau */
+button{
+  background: rgba(255,255,255,0.22) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12) !important;
+}
+
+/* Entfernen: etwas rot */
+button.danger{
+  background: rgba(255,70,70,0.20) !important;
+}
+
+/* Icon-Optik: „schwarz“ wie Piktogramme */
+.icon-btn,
+.sb-btn{
+  filter: grayscale(1) contrast(1.25) brightness(0.15) !important;
+}
+
+/* Text wieder normal lesbar */
+.icon-btn,
+.sb-btn{
+  color: rgba(0,0,0,0.78) !important;
+  background: rgba(255,255,255,0.20) !important;
+}
+/* ===== Icons + Logout sichtbar machen (nur Optik) ===== */
+
+/* 1) Icon-Filter raus, damit Icons wieder sichtbar sind */
+.icon-btn,
+.sb-btn{
+  filter: none !important;
+}
+
+/* 2) Sidebar-Buttons: Icon/„Kästchen“ (Emoji/Text) schwarz + klar */
+.sb-btn{
+  color: rgba(0,0,0,0.85) !important;
+  background: rgba(255,255,255,0.20) !important;
+}
+
+/* Falls du später echte <i>-Icons oder SVG nutzt */
+.sb-btn i,
+.sb-btn svg{
+  color: rgba(0,0,0,0.90) !important;
+  fill: rgba(0,0,0,0.90) !important;
+}
+
+/* 3) Topbar-Icon Buttons (Settings/Account) sichtbar */
+.icon-btn{
+  color: rgba(0,0,0,0.85) !important;
+  background: rgba(255,255,255,0.24) !important;
+}
+
+/* 4) Logout: deutlich sichtbar, wie Warn/Exit */
+#btnLogout{
+  color: #fff !important;
+  background: rgba(220, 60, 60, 0.55) !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18) !important;
+  font-weight: 700 !important;
+}
+
+/* Hover Effekt für Logout */
+#btnLogout:hover{
+  background: rgba(220, 60, 60, 0.70) !important;
 }
