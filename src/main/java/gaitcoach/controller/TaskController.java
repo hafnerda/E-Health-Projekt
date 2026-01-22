@@ -1,8 +1,8 @@
-package ehealth.controller;
+package gaitcoach.controller;
 
-import ehealth.model.TaskAssignment;
-import ehealth.model.TaskProgress;
-import ehealth.service.TaskService;
+import gaitcoach.model.TaskAssignment;
+import gaitcoach.model.TaskProgress;
+import gaitcoach.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
