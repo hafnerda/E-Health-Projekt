@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Therapeut - Termine</title>
+  <style>
+    :root{
+      --bg1:#7f97ad; --bg2:#6f879f;
+      --panel:#d7e0ea;
+      --btn:#5f7387; --btnHover:#55697d;
+      --text:#0f1720;
+      --shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 600px at 70% 80%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(900px 450px at 30% 20%, rgba(255,255,255,.12), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+    .wrap{ max-width: 1200px; margin:0 auto; padding: 26px 22px 40px; position:relative; }
+    .topbar{ display:flex; align-items:center; justify-content:center; position:relative; margin-top: 8px; width:100%; }
+    .brand{ text-align:center; user-select:none; }
+    .brand .title{ font-weight: 800; letter-spacing: 2px; font-size: 34px; text-transform: uppercase; text-shadow: 0 1px 0 rgba(255,255,255,.25); }
+    .brand .title i{ font-weight: 500; text-transform:none; letter-spacing: 0; margin-left: 6px; font-family: "Brush Script MT","Segoe Script",cursive; font-size: 32px; }
+    .brand .line{ height: 2px; width: 520px; max-width: 85vw; background: rgba(0,0,0,.35); margin: 10px auto 0; border-radius: 999px; }
+
+    .panel{
+      background: rgba(215,224,234,.92);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.45);
+    }
+    .layout{
+      display:flex;
+      gap: 24px;
+      justify-content:center;
+      align-items:flex-start;
+      margin-top: 26px;
+      flex-wrap: wrap;
+    }
+    .main{
+      width: 740px;
+      max-width: 95vw;
+      padding: 22px 22px 18px;
+    }
+    .main h2{
+      margin: 4px 0 14px;
+      text-align:center;
+      letter-spacing: 1px;
+      font-size: 28px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .rowForm{
+      display:flex;
+      gap: 14px;
+      justify-content:center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size: 13px;
+      opacity:.9;
+    }
+    input, select{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.18);
+      outline:none;
+      background: rgba(255,255,255,.65);
+      min-width: 220px;
+    }
+    .btn{
+      border:0;
+      border-radius: 14px;
+      padding: 11px 18px;
+      background: rgba(95,115,135,.85);
+      color:#fff;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(0,0,0,.18);
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+    .btn:hover{ background: rgba(95,115,135,1); }
+    .btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+    .side{
+      width: 320px;
+      max-width: 95vw;
+      padding: 16px 16px 14px;
+    }
+    .side h3{
+      margin: 0 0 10px;
+      text-align:center;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .listBox{
+      background: rgba(85,105,125,.75);
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      color:#fff;
+      display:flex;
+      gap: 10px;
+    }
+    .col{
+      border-radius: 14px;
+      padding: 10px 10px;
+      background: rgba(255,255,255,.08);
+      min-height: 330px;
+      overflow:auto;
+    }
+    .col.days{ width: 62px; text-align:center; }
+    .col.dates{ flex:1; }
+    .col.times{ width: 70px; text-align:center; }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      opacity:.95;
+    }
+    .row button{
+      width: 100%;
+      border:0;
+      background: transparent;
+      color:#fff;
+      text-align:left;
+      cursor:pointer;
+      padding: 6px 6px;
+      border-radius: 10px;
+    }
+    .row button:hover{ background: rgba(0,0,0,.18); }
+    .row button.selected{ outline: 3px solid rgba(44,160,255,.9); background: rgba(0,0,0,.18); }
+
+    .hint{
+      text-align:center;
+      margin-top: 8px;
+      font-size: 13px;
+      opacity:.85;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">WILLKOMMEN BEI <i>zebris GaitCoach</i></div>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel main">
+        <h2>TERMINE &amp; ERINNERUNGEN</h2>
+
+        <div class="rowForm">
+          <div class="field">
+            <div>Patient auswählen</div>
+            <select id="patientSelect"></select>
+          </div>
+
+          <div class="field">
+            <div>Datum</div>
+            <input type="date" id="dateInput">
+          </div>
+
+          <div class="field">
+            <div>Uhrzeit</div>
+            <input type="time" id="timeInput">
+          </div>
+
+          <div class="field" style="justify-content:flex-end">
+            <button class="btn" id="btnCreate">Termin anlegen</button>
+          </div>
+        </div>
+
+        <div class="rowForm">
+          <button class="btn" id="btnCancel" disabled>Termin absagen (24h Regel)</button>
+        </div>
+
+        <div class="hint" id="hint">Wähle links einen Patient und rechts einen Termin.</div>
+      </div>
+
+      <div class="panel side">
+        <h3>TERMINE</h3>
+        <div class="listBox">
+          <div class="col days" id="colDow"></div>
+          <div class="col dates" id="colDate"></div>
+          <div class="col times" id="colTime"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/therapist-appointments.js"></script>
+</body>
+</html>
