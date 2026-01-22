@@ -406,13 +406,38 @@ document.getElementById("sbImport").addEventListener("click", () => {
   document.getElementById("btnAccount").addEventListener("click", () => alert("Account (später)"));
 }
 
+document.getElementById("sbCalendar")?.addEventListener("click", () => {
+  window.location.href = "/therapist-appointments.html";
+});
+
+document.getElementById("sbTasks")?.addEventListener("click", () => {
+  window.location.href = "/therapist-tasks.html";
+});
+
+
+
 // --------- Boot ----------
 document.addEventListener("DOMContentLoaded", async () => {
   requireAuth();
 
-    const patientModal = initPatientModal();
-    const measurementModal = initMeasurementModal();
-    bindActions(patientModal, measurementModal);
+  const patientModal = initPatientModal();
+  const measurementModal = initMeasurementModal();
+  bindActions(patientModal, measurementModal);
+
+  // ✅ Aufgaben-Button (robust + Debug)
+  const sbTasks = document.getElementById("sbTasks");
+  if (!sbTasks) {
+    console.warn("sbTasks nicht gefunden. Prüfe dashboard.html: id='sbTasks' fehlt oder ist anders.");
+  } else {
+    sbTasks.addEventListener("click", () => {
+      window.location.href = "/therapist-tasks.html";
+    });
+    console.log("sbTasks Listener aktiv");
+  }
 
   await loadPatients();
+
+
+
 });
+
