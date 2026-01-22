@@ -1,4 +1,4 @@
-const API = ""; // falls du schon API_BASE nutzt, setz hier z.B. "/api"
+const API = ""; // falls später eine Base-URL brauchst
 
 function requireAuth() {
   const raw = localStorage.getItem("auth_user");
@@ -22,72 +22,107 @@ async function apiGet(url) {
   return ct.includes("application/json") ? resp.json() : resp.text();
 }
 
-function setProgress(done, total) {
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  document.getElementById("progressText").textContent = `${done}/${total} erledigt (${pct}%)`;
-  document.getElementById("progressBar").style.width = `${pct}%`;
+/* ===== UI helpers für das neue Design ===== */
+
+function setHello(fullName) {
+  const first = (fullName || "").trim().split(" ")[0] || "";
+  document.getElementById("hello").textContent = `Hallo ${first},`;
 }
 
-function renderMeasurements(items) {
-  const ul = document.getElementById("measurementList");
-  const info = document.getElementById("listInfo");
-  ul.innerHTML = "";
-
-  if (!items || items.length === 0) {
-    info.textContent = "Keine Messungen gefunden.";
-    setProgress(0, 0);
-    return;
-  }
-
-  info.textContent = `${items.length} Messungen gefunden.`;
-  // Beispiel: Fortschritt = Anzahl Messungen mit "done" (falls du sowas hast)
-  const done = items.filter(x => x.status === "DONE" || x.done === true).length;
-  setProgress(done, items.length);
-
-  for (const m of items) {
-    const li = document.createElement("li");
-    const title = m.name || m.filename || `Messung #${m.id}`;
-    li.textContent = title;
-
-    // Optional: wenn Backend dir PDF-URL gibt
-    // if (m.pdfUrl) { ... }
-    ul.appendChild(li);
-  }
+function setPercent(p) {
+  const pct = Math.max(0, Math.min(100, Math.round(p)));
+  document.getElementById("ring").style.setProperty("--p", pct);
+  document.getElementById("pctText").textContent = `${pct}%`;
 }
+
+function setHint(text) {
+  document.getElementById("hintText").textContent = text;
+}
+
+function computeProgress(measurements) {
+  const total = measurements.length;
+  if (total === 0) return 0;
+
+  const done = measurements.filter(m =>
+    m?.status === "DONE" ||
+    m?.status === "COMPLETED" ||
+    m?.done === true ||
+    m?.completed === true
+  ).length;
+
+  return (done / total) * 100;
+}
+
+/* ===== Daten laden ===== */
 
 async function loadMyData() {
   const user = requireAuth();
   if (!user) return;
 
-  // Sicherheitscheck: falls jemand direkt patient.html öffnet
+  // Falls jemand als Therapeut hier landet
   if (user.role !== "PATIENT") {
     window.location.href = "/dashboard.html";
     return;
   }
 
+  // Name anzeigen
+  setHello(user.name);
+
   // 1) PatientId holen
   const patient = await apiGet(`${API}/api/patients/by-user/${user.id}`);
-  const patientId = patient.id ?? patient.patientId ?? patient;
+  const patientId = patient.id ?? patient.patientId;
 
-  if (!patientId) throw new Error("Keine patientId aus /api/patients/by-user/... erhalten.");
+  if (!patientId) throw new Error("Keine patientId erhalten.");
 
   // 2) Messungen holen
   const measurements = await apiGet(`${API}/api/patients/${patientId}/measurements`);
+  const list = Array.isArray(measurements) ? measurements : (measurements.items || []);
 
-  renderMeasurements(Array.isArray(measurements) ? measurements : (measurements.items || []));
+  // 3) Fortschritt anzeigen
+  const pct = computeProgress(list);
+  setPercent(pct);
+  setHint(`Super, du hast ${Math.round(pct)}% deines Wochenziels erreicht.`);
 }
+
+/* ===== Buttons ===== */
 
 document.getElementById("btnLogout").addEventListener("click", () => {
   localStorage.removeItem("auth_user");
   window.location.href = "/index.html";
 });
 
-// Platzhalter: Buttons erstmal nur “da”, Logik später an echte Endpoints hängen
-document.getElementById("btnImport").addEventListener("click", () => alert("Import: kommt als nächstes"));
-document.getElementById("btnExport").addEventListener("click", () => alert("Export: kommt als nächstes"));
-document.getElementById("btnReport").addEventListener("click", () => alert("Report: kommt als nächstes"));
+document.getElementById("btnPlan").addEventListener("click", () => {
+  window.location.href = "/patient-trainingplan.html";
+});
+
+document.getElementById("btnProgress")?.addEventListener("click", () => {
+  window.location.href = "/patient-progress.html";
+});
+
+document.getElementById("btnReminders").addEventListener("click", () => {
+  window.location.href = "/patient-appointments.html";
+});
+
+/* ===== Start ===== */
 
 loadMyData().catch(err => {
   console.error(err);
-  document.getElementById("listInfo").textContent = "Fehler beim Laden der Daten.";
+  setPercent(0);
+  setHint("Daten konnten nicht geladen werden.");
 });
+
+// Account-Dropdown
+const account = document.getElementById("account");
+const btnAccount = document.getElementById("btnAccount");
+
+btnAccount.addEventListener("click", () => {
+  account.classList.toggle("open");
+});
+
+// Klick außerhalb schließt Menü
+document.addEventListener("click", (e) => {
+  if (!account.contains(e.target)) {
+    account.classList.remove("open");
+  }
+});
+
