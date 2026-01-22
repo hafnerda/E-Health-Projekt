@@ -1,4 +1,4 @@
-package ehealth.model;
+package gaitcoach.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

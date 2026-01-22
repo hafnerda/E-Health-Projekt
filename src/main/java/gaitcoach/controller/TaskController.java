@@ -2,7 +2,7 @@ package gaitcoach.controller;
 
 import gaitcoach.model.TaskAssignment;
 import gaitcoach.model.TaskProgress;
-import gaitcoach.service.TaskService;
+import gaitcoach.services.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

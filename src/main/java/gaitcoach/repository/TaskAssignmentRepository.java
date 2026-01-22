@@ -1,7 +1,7 @@
-package ehealth.repository;
+package gaitcoach.repository;
 
-import ehealth.model.Patient;
-import ehealth.model.TaskAssignment;
+import gaitcoach.model.Patient;
+import gaitcoach.model.TaskAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

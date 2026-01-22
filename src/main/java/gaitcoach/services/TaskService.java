@@ -1,11 +1,11 @@
-package ehealth.service;
+package gaitcoach.services;
 
-import ehealth.model.Patient;
-import ehealth.model.TaskAssignment;
-import ehealth.model.TaskProgress;
-import ehealth.repository.PatientRepository;
-import ehealth.repository.TaskAssignmentRepository;
-import ehealth.repository.TaskProgressRepository;
+import gaitcoach.model.Patient;
+import gaitcoach.model.TaskAssignment;
+import gaitcoach.model.TaskProgress;
+import gaitcoach.repository.PatientRepository;
+import gaitcoach.repository.TaskAssignmentRepository;
+import gaitcoach.repository.TaskProgressRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
