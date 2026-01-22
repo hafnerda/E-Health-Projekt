@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trainingsplan</title>
+
+  <style>
+    :root{
+      --bg1:#7f97ad;
+      --bg2:#6f879f;
+      --panel:#d7e0ea;
+      --panel2:#cbd6e2;
+      --btn:#5f7387;
+      --btnHover:#55697d;
+      --text:#0f1720;
+      --shadow: 0 10px 30px rgba(0,0,0,.18);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 600px at 70% 80%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(900px 450px at 30% 20%, rgba(255,255,255,.12), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+
+    .wrap{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 26px 22px 40px;
+      position: relative;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      margin-top: 8px;
+    }
+
+    .brand{
+      text-align:center;
+      user-select:none;
+    }
+    .brand .title{
+      font-weight: 800;
+      letter-spacing: 2px;
+      font-size: 34px;
+      text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+    }
+    .brand .title i{
+      font-weight: 500;
+      text-transform:none;
+      letter-spacing: 0;
+      margin-left: 6px;
+      font-family: "Brush Script MT", "Segoe Script", cursive;
+      font-size: 32px;
+    }
+    .brand .line{
+      height: 2px;
+      width: 520px;
+      max-width: 85vw;
+      background: rgba(0,0,0,.35);
+      margin: 10px auto 0;
+      border-radius: 999px;
+    }
+
+    /* Account rechts oben */
+    .account {
+      position: absolute;
+      right: 0;
+      top: -6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .avatar{
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.12);
+      display:grid;
+      place-items:center;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.35);
+      cursor:pointer;
+    }
+    .avatar svg{ opacity:.85; }
+
+    .account-menu {
+      display: none;
+      margin-top: 6px;
+      background: rgba(215,224,234,.95);
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      padding: 6px;
+    }
+    .account-menu button {
+      border: 0;
+      background: transparent;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+    .account-menu button:hover {
+      background: rgba(0,0,0,.1);
+    }
+    .account.open .account-menu { display:block; }
+
+    .center{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap: 26px;               /* Abstand zwischen Card und Info-Box */
+    margin-top: 38px;
+    flex-wrap: wrap;         /* auf kleineren Screens untereinander */
+    }
+
+    .card{
+      width: 420px;
+      max-width: 92vw;
+      background: rgba(215,224,234,.92);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      border: 1px solid rgba(255,255,255,.45);
+    }
+
+    .card h2{
+      margin: 0 0 14px;
+      font-size: 28px;
+      font-weight: 700;
+      text-align:center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+    }
+
+    /* Mini Kalender (1 Woche wie im Mock) */
+    .mini-cal{
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 12px 14px 10px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.16);
+      margin: 0 auto 16px;
+      width: 330px;
+      max-width: 100%;
+    }
+    .mini-cal .month{
+      text-align:center;
+      font-size: 14px;
+      opacity:.9;
+      margin-bottom: 6px;
+    }
+    .dow{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      font-size: 11px;
+      opacity: .9;
+      margin-bottom: 8px;
+      text-align:center;
+    }
+    .days{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .day{
+      height: 28px;
+      border-radius: 8px;
+      display:grid;
+      place-items:center;
+      font-size: 12px;
+      cursor:pointer;
+      background: rgba(255,255,255,.92);
+      color: rgba(0,0,0,.85);
+      user-select:none;
+      border: 2px solid transparent;
+    }
+    .day.inactive{
+      opacity:.35;
+      cursor: default;
+    }
+    .day.selected{
+      border-color: #d04444;
+      box-shadow: 0 4px 12px rgba(0,0,0,.18);
+    }
+    .day.hasTasks{
+      background: rgba(20,40,60,.85);
+      color: rgba(255,255,255,.92);
+    }
+
+    /* Tasks Panel */
+    .tasks{
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.16);
+    }
+    .tasks .hint{
+      text-align:center;
+      font-size: 13px;
+      opacity:.95;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .task-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 6px 2px;
+    }
+    .task-left{
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+      min-width: 0;
+    }
+    .task-title{
+      color: rgba(255,255,255,.92);
+      font-size: 14px;
+      line-height: 1.2;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+    .task-sub{
+      color: rgba(255,255,255,.75);
+      font-size: 12px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+    .checks{
+      display:flex;
+      gap: 6px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .chk{
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 2px solid rgba(255,255,255,.75);
+      background: rgba(255,255,255,.15);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      user-select:none;
+    }
+    .chk.done{
+      background: rgba(255,255,255,.92);
+      border-color: rgba(255,255,255,.92);
+      color: rgba(0,0,0,.85);
+    }
+    .chk.disabled{
+      opacity:.45;
+      cursor: not-allowed;
+    }
+
+    /* Bottom Nav Panel */
+    .bottom{
+      display:flex;
+      justify-content:center;
+      margin-top: 34px;
+    }
+    .btn-panel{
+      width: 640px;
+      max-width: 95vw;
+      background: rgba(215,224,234,.92);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.45);
+      padding: 22px;
+      display:flex;
+      gap: 24px;
+      align-items:stretch;
+      justify-content:center;
+      position: relative;
+    }
+
+    .bigbtn{
+      width: 170px;
+      min-height: 110px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--btn);
+      color: #fff;
+      font-size: 18px;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(0,0,0,.18);
+      padding: 16px 14px;
+      line-height: 1.1;
+      transition: transform .08s ease, background .15s ease;
+    }
+    .bigbtn:hover{ background: var(--btnHover); }
+    .bigbtn:active{ transform: translateY(1px); }
+    .bigbtn.active{
+      background: rgba(25,45,65,.92);
+    }
+
+    .corner{
+      position: fixed;
+      right: 18px;
+      bottom: 16px;
+      opacity: .55;
+      font-size: 12px;
+      user-select:none;
+    }
+
+    /* --- FIX: Klick sicher erlauben --- */
+    .tasks, .task-row, .task-left, .checks, .chk {
+    pointer-events: auto !important;
+    }
+
+    .chk {
+    position: relative;
+    z-index: 5;
+    }
+    .task-row {
+    position: relative;
+    z-index: 1;
+    }
+
+    .chkInput {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #2e7d32; /* ✅ grün */
+    }
+
+    .chkInput:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    }
+
+    /* Info-Button (i) */
+    .info-btn{
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-weight: 800;
+        background: rgba(255,255,255,0.72);
+        color:#1b2a3a;
+        box-shadow: 0 10px 20px rgba(0,0,0,.15);
+    }
+    .info-btn:hover{
+        transform: translateY(-1px);
+    }
+
+    /* Rechte Info-Box */
+    .exercise-panel{
+        background: rgba(255,255,255,0.55);
+        border-radius: 18px;
+        padding: 16px 18px;
+        box-shadow: 0 18px 45px rgba(0,0,0,.18);
+        max-height: 520px;
+        overflow:auto;
+        width: 520px;            /* rechte Box Breite */
+        max-width: 92vw;
+
+
+    }
+
+    .exercise-panel.hidden{ display:none; }
+
+    .exercise-panel-title{
+        font-weight: 900;
+        margin-bottom: 10px;
+        
+    }
+
+    .exercise-panel-text{
+        white-space: pre-line;  /* Zeilenumbrüche aus JS-Text übernehmen */
+        opacity: .95;
+        line-height: 1.35;
+    }
+
+
+
+    /* ===== Info Button (runde Badge, Hover, Farbe) ===== */
+    .info-btn{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 0;
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 1;
+
+    background: rgba(95,115,135,0.95);   /* wie deine Buttons */
+    color: #fff;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+    }
+
+    .info-btn:hover{
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    }
+
+    .info-btn:active{
+    transform: translateY(0px) scale(0.98);
+    }
+
+    .info-btn:focus-visible{
+    outline: 3px solid rgba(255,255,255,.75);
+    outline-offset: 2px;
+    }
+
+    /* ===== Panel Optik (passt zu deinen Cards) ===== */
+    .exercise-panel{
+    background: rgba(215,224,234,0.92); /* wie Panel-Farbe */
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    padding: 18px 18px 16px;
+    }
+
+    .exercise-panel-title{
+    font-weight: 800;
+    font-size: 18px;
+    margin-bottom: 10px;
+    }
+
+    .exercise-panel-text{
+    white-space: pre-line; /* Zeilenumbrüche aus JS Text behalten */
+    font-size: 14px;
+    line-height: 1.45;
+    opacity: .95;
+    }
+
+    /* hidden class (falls nicht vorhanden) */
+    .hidden{ display:none !important; }
+
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="title">WILLKOMMEN BEI <i>zebris GaitCoach</i></div>
+        <div class="line"></div>
+      </div>
+
+      <div class="account" id="account">
+        <div class="avatar" id="btnAccount" title="Account">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5Z" fill="rgba(0,0,0,.75)"/>
+            <path d="M4 22c0-4.42 3.58-8 8-8s8 3.58 8 8"
+                  stroke="rgba(0,0,0,.75)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div id="accountName">Mein Account</div>
+
+        <div class="account-menu" id="accountMenu">
+          <button id="btnLogout">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="center">
+    <!-- LINKS: deine Trainingsplan-Card -->
+    <div class="card">
+        <h2>TRAININGSPLAN</h2>
+
+        <div class="mini-cal">
+        <div class="month" id="calMonth">Monat</div>
+        <div class="dow">
+            <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+        </div>
+        <div class="days" id="calDays"></div>
+        </div>
+
+        <div class="tasks">
+        <div class="hint" id="tasksHint">Lade…</div>
+        <div id="taskList"></div>
+        </div>
+    </div>
+
+    <!-- RECHTS: Info-Box (startet versteckt) -->
+    <section id="exercisePanel" class="exercise-panel hidden">
+        <div id="exercisePanelTitle" class="exercise-panel-title">Übung</div>
+        <div id="exercisePanelText" class="exercise-panel-text"></div>
+    </section>
+    </div>
+
+
+    <div class="bottom">
+      <div class="btn-panel">
+        <button class="bigbtn active" id="btnPlan">Trainingsplan<br>ansehen</button>
+        <button class="bigbtn" id="btnProgress">Meine<br>Fortschritte</button>
+        <button class="bigbtn" id="btnAppointments">Termine &<br>Erinnerungen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="corner">zebris GaitCoach</div>
+
+  <script src="/js/patient-trainingplan.js"></script>
+</body>
+</html>
